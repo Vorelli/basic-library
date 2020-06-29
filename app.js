@@ -5,9 +5,15 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 
+require('./models/author');
+require('./models/book');
+require('./models/bookinstance');
+require('./models/genre');
+
 var catalogRouter = require('./routes/catalog');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+
 
 var app = express();
 
