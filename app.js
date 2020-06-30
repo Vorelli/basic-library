@@ -13,11 +13,16 @@ require('./models/genre');
 var catalogRouter = require('./routes/catalog');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var compression = require('compression');
+var helmet = require('helmet');
 
 var app = express();
 
-var mongoDB =
+app.use(helmet());
+
+var dev_db_url =
   'mongodb+srv://natale:Natale195@basic-library-fjgcs.mongodb.net/basic-library?retryWrites=true&w=majority';
+var mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -30,6 +35,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(compression());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
