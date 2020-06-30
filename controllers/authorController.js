@@ -155,12 +155,75 @@ exports.author_delete_post = function (req, res, next) {
   async.parallel(getAuthorAndAuthorsBooks, afterGet);
 };
 
-exports.author_update_get = function (req, res) {
-  // TODO: AUTHOR UPDATE GET
-  res.send('');
+exports.author_update_get = function (req, res, next) {
+  const getAuthor = {
+    author: function (cb) {
+      Author.findById(req.params.id).exec(cb);
+    }
+  };
+
+  const afterGet = function (err, results) {
+    if (err) return next(err);
+    if (results.author == null) res.redirect('/catalog/authors');
+    res.render('author_form', {
+      title: 'Update Author',
+      author: results.author
+    });
+  };
+
+  async.parallel(getAuthor, afterGet);
 };
 
-exports.author_update_post = function (req, res) {
-  // TODO: AUTHOR UPDATE POST
-  res.send('');
-};
+exports.author_update_post = [
+  sanitizeBody('first_name').escape(),
+  sanitizeBody('family_name').escape(),
+  sanitizeBody('date_of_birth').escape(),
+  sanitizeBody('date_of_death').escape(),
+
+  body('first_name')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('First name must be specified')
+    .isAlphanumeric()
+    .withMessage('First name has non-alphanumeric characters.'),
+  body('family_name')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Family name must be specified')
+    .isAlphanumeric()
+    .withMessage('Family name has non-alphanumeric characters.'),
+  body('date_of_birth', 'Invalid date of birth')
+    .optional({ checkFalsy: true })
+    .isISO8601(),
+  body('date_of_death', 'Invalid date of death')
+    .optional({ checkFalsy: true })
+    .isISO8601(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    var author = new Author({
+      first_name: req.body.first_name,
+      family_name: req.body.family_name,
+      date_of_birth: req.body.date_of_birth,
+      date_of_death: req.body.date_of_death,
+      _id: req.params.id
+    });
+
+    if (!errors.isEmpty()) {
+      res.render('author_form', {
+        title: 'Update Author',
+        author: author,
+        errors: errors.array()
+      });
+    } else {
+      Author.findByIdAndUpdate(req.params.id, author, {}, function (
+        err,
+        theAuthor
+      ) {
+        if (err) return next(err);
+        res.redirect(theAuthor.url);
+      });
+    }
+  }
+];

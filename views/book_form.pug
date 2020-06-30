@@ -13,7 +13,8 @@ block content
         - authors.sort((a, b) => { let familyA = a.family_name.toUpperCase(); let familyB = b.family_name.toUpperCase(); let firstA = a.first_name.toUpperCase(); let firstB = b.first_name.toUpperCase(); return (familyA < familyB) ? -1 : (familyA > familyB) ? 1 : (firstA < firstB) ? -1 : (firstA > firstB) ? 1 : 0 })
         for author in authors
           if book
-            option(value=author._id selected = (author._id.toString() == book.author ? 'selected' : false) )= author.name
+            option(value=author._id selected = (author._id.toString()==book.author._id
+                || author._id.toString() == book.author ? 'selected' : false) )= author.name
           else
             option(value=author._id)= author.name
     .form-group

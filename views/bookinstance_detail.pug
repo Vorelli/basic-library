@@ -2,11 +2,11 @@ extends layout
 
 block content
   h1 ID: #{bookInstance._id}
-  p #[strong Title:]
-    a(hf=bookInstance.book.url) #{bookInstance.book.title}
+  p #[strong Title: ]
+    a(href=bookInstance.book.url) #{bookInstance.book.title}
   p #[strong Imprint:] #{bookInstance.imprint}
 
-  p #[strong Status:]
+  p #[strong Status: ]
     if bookInstance.status=='Available'
       span.text-success #{bookInstance.status}
     else if bookInstance.status=='Maintenance'
@@ -16,3 +16,9 @@ block content
   
   if bookInstance.status != 'Available'
     p #[strong Due back:] #{bookInstance.due_back_formatted}
+
+  hr
+  p
+    a(href=bookInstance.url+'/delete') Delete Book Copy
+  p
+    a(href=bookInstance.url+'/update') Update Book Copy

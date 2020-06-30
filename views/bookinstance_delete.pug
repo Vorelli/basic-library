@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= "Delete copy of " + bookInstance.book.title
+
+  p= bookInstance.imprint
+
+  p Do you really want to delete this book copy?
+
+  form(method='POST' action='')
+    .form-group
+      input#bookinstanceid.form-control(type='hidden' name='bookinstanceid' required=true value=bookInstance._id)
+    button.btn.btn-primary(type = 'submit') Submit

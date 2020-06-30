@@ -3,6 +3,7 @@ extends layout
 block content
   h1= title
   ul
+    - bookinstance_list.sort(function(a, b) { let titleA = a.book.title; let titleB = b.book.title; let imprintA = a.imprint; let imprintB = b.imprint; return (titleA < titleB ? -1 : titleA > titleB ? 1 : imprintA < imprintB ? -1 : imprintA > imprintB ? 1 : 0) })
     each val in bookinstance_list
       li
         a(href=val.url) #{val.book.title} : #{val.imprint} -
