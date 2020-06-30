@@ -14,7 +14,6 @@ var catalogRouter = require('./routes/catalog');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-
 var app = express();
 
 var mongoDB =
