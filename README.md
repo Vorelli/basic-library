@@ -8,7 +8,7 @@
 
 Use [node and node package manager](https://nodejs.org/en/) in order to install prerequisites and run the server.
 
-``bash
+```bash
 npm install
 npm run serverstart
 ```
